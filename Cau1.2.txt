@@ -1,0 +1,71 @@
+độ phức tạp của giải thuật QuickSort
+
+e dùng 2 hàm để thể hiện giải thuật 
+static void QuickSort(int[] array, int low, int high)
+    {
+        if (low < high)
+        {
+            int pivot = Partition(array, low, high);
+
+            QuickSort(array, low, pivot - 1);
+            QuickSort(array, pivot + 1, high);
+        }
+    }
+
+    static int Partition(int[] array, int low, int high)
+    {
+        int pivot = array[high]; (1)
+        int i = low - 1; (2)
+
+        for (int j = low; j < high; j++)(3)
+        {
+            if (array[j] <= pivot)(4)
+            {
+                i++;(5)
+                Swap(array, i, j);(6)
+            }
+        }
+
+        Swap(array, i + 1, high);(7)
+        return i + 1;(8)
+    }
+
+giờ em sẽ bắt đầu phân tích
+ 
+đầu tiên là hàm Partition
+-Vòng lặp for chạy từ low đến high - 1, tức là high - low lần.
+-Trong mỗi lần lặp, có tối đa 3 phép so sánh và 2 phép gán (nếu cần đổi chỗ).
+-Tổng cộng, độ phức tạp của hàm Partition là O(n), với n là số phần tử trong mảng con.
+
+tiếp theo là hàm QuickSort
+
+Gọi đệ quy cho hai mảng con.
+Độ dài của mỗi mảng con giảm đi ít nhất 1 so với mảng cha.
+Để đơn giản hóa, giả sử mỗi lần chia mảng đều chia đôi được (trường hợp trung bình).
+
+giờ giả sử độ sâu của cây đệ quy là d thì
+-Ở tầng thứ i của cây đệ quy, có 2^i nút (mảng con).
+-Tổng số phần tử ở tầng i là 2^i * n / 2^d = n / 2^(d-i).
+-Độ phức tạp của hàm Partition ở mỗi nút là O(n / 2^(d-i)).
+-Tổng độ phức tạp của một tầng là 2^i * O(n / 2^(d-i)) = O(n).
+vậy tổng độ phức tạp của toàn bộ cây đệ quy trên là 
+Có d + 1 tầng (từ 0 đến d).
+Mỗi tầng có độ phức tạp O(n).
+Tổng độ phức tạp là O(n * (d + 1)).
+
+Tính độ sâu d:
+
+Mỗi lần chia đôi, độ dài mảng giảm đi một nửa.
+Để giảm từ n về 1, cần chia đôi log2(n) lần.
+Do đó, d = log2(n).
+vậy Tổng độ phức tạp của Quicksort là O(n * (log2(n) + 1)) = O(n * log n).
+tuy nhiên vẫn sẽ có trường hợp xấu nhất:
+Trường hợp xấu nhất
+-Nếu mảng đã sắp xếp hoặc sắp xếp ngược, mỗi lần chia mảng chỉ giảm đi một phần tử.
+-Độ sâu của cây đệ quy sẽ là n.
+-Tổng độ phức tạp sẽ là O(n^2).
+
+
+tổng kết lại là 
+Độ phức tạp trung bình của Quicksort là O(n log n).
+Độ phức tạp trường hợp xấu nhất của Quicksort là O(n^2).
